@@ -34,7 +34,7 @@ namespace RectangleTrainer.ChromaTower
 
             IPlayerState playerState = new PlayerState(playerHealth);
             IScoreKeeper scoreKeeper = new PlayerPrefScoreKeeper();
-            IDifficulty difficulty = new Difficulty(playerState);
+            IDifficulty difficulty = new Difficulty(playerState, maxSlots: 5, introPlatforms: 2);
 
             ChromaTower tower = new ChromaTower(scoreKeeper, playerState, difficulty);
 

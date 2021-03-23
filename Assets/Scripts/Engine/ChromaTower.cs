@@ -36,13 +36,13 @@ namespace RectangleTrainer.ChromaTower.Engine
             OnNewGame?.Invoke();
         }
 
-        public bool HitCheck(int ballColorId, int targetColorId)
+        public HitResult HitCheck(int ballColorId, int targetColorId)
         {
             if(ballColorId == targetColorId)
             {
                 playerState.Regen();
                 scoreKeeper.IncrementCurrentScore(playerState.Combo);
-                return true;
+                return new HitResult { successfulHit = true, playerDead = false };
             }
             else
             {
@@ -51,8 +51,11 @@ namespace RectangleTrainer.ChromaTower.Engine
                 {
                     GameState = GameState.GameOver;
                     OnGameOver?.Invoke();
+
+                    return new HitResult { successfulHit = false, playerDead = true };
                 }
-                return false;
+
+                return new HitResult { successfulHit = false, playerDead = false };
             }
         }
     }

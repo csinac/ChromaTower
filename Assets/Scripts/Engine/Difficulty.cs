@@ -3,11 +3,14 @@
     public class Difficulty: IDifficulty
     {
         public int MaxSlots { get; private set; }
+
         private int lastSlot;
         private IPlayerState player;
         private float almostDeadLimit;
+        private bool forceSingleColor = true;
+        private int introPlatforms;
 
-        public Difficulty(IPlayerState playerState, int maxSlots = 8, float almostDeadLimit = 0.1f)
+        public Difficulty(IPlayerState playerState, int maxSlots = 8, int introPlatforms = 0, float almostDeadLimit = 0.1f)
         {
             if (maxSlots < 1)
                 throw new System.Exception("Max Slots should be at least 1");
@@ -16,13 +19,20 @@
                 throw new System.Exception("Player cannot be null");
 
             MaxSlots = maxSlots;
+            lastSlot = UnityEngine.Random.Range(0, MaxSlots);
             player = playerState;
             this.almostDeadLimit = almostDeadLimit;
+            this.introPlatforms = introPlatforms;
+        }
+
+        public void UpdateSingleColorStatus(int platformCount)
+        {
+            forceSingleColor = platformCount < introPlatforms - 1;
         }
 
         public int NextSlot()
         {
-            if(player.HPNormalized < almostDeadLimit)
+            if(player.HPNormalized < almostDeadLimit || forceSingleColor)
                 return lastSlot;
 
             lastSlot = UnityEngine.Random.Range(0, MaxSlots);

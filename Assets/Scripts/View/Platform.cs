@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RectangleTrainer.ChromaTower.View
 {
-    class Platform: MonoBehaviour
+    class Platform : MonoBehaviour
     {
         private List<PlatformSlice> slices = new List<PlatformSlice>();
 
@@ -27,7 +27,6 @@ namespace RectangleTrainer.ChromaTower.View
         public void Explode()
         {
             Destroy(gameObject);
-            //TODO: Animate
         }
     }
 }

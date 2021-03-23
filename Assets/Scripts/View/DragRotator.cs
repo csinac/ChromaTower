@@ -12,9 +12,9 @@ namespace RectangleTrainer.ChromaTower.View
         private ChromaTowerRenderer tower;
         private Vector2[] touchPos = new Vector2[2];
         private bool[] touchStates = new bool[2];
-        private bool DragBegan { get => !touchStates[0] && touchStates[1]; }
+        private bool DragBegan { get => touchStates[0] && !touchStates[1]; }
         private bool Dragging { get => touchStates[0] && touchStates[1]; }
-        private bool DragEnded { get => touchStates[0] && !touchStates[1]; }
+        private bool DragEnded { get => !touchStates[0] && touchStates[1]; }
 
         public void AttachTower(ChromaTowerRenderer tower)
         {
@@ -53,6 +53,7 @@ namespace RectangleTrainer.ChromaTower.View
             if (DragBegan)
             {
                 touchPos[0] = InputPosition;
+
                 return 0;
             }
             else if (Dragging)
@@ -68,7 +69,10 @@ namespace RectangleTrainer.ChromaTower.View
 
         public void SmoothDelta()
         {
-            delta = delta * dampening + DragDelta() * (1 - dampening);
+            delta = DragDelta();
+
+            if(Dragging)
+                delta = delta * (1 - dampening) + DragDelta() * dampening;
         }
 
         private void Update()

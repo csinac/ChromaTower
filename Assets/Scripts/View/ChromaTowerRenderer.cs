@@ -39,6 +39,7 @@ namespace RectangleTrainer.ChromaTower.View
 
         private void Initialize()
         {
+            Application.targetFrameRate = 60;
             platformList = new List<Platform>();
             rotator = GetComponent<DragRotator>();
             rotator.AttachTower(this);
@@ -55,6 +56,7 @@ namespace RectangleTrainer.ChromaTower.View
             for (int i = 0; i < 5; i++)
             {
                 PushPlatform();
+                tower.difficulty.UpdateSingleColorStatus(i);
             }
         }
 
@@ -75,28 +77,36 @@ namespace RectangleTrainer.ChromaTower.View
         public void OnPlayerCollision(GameObject collided)
         {
             //TODO: Post UI
-            //if (tower.GameState == GameState.Idle || tower.GameState == GameState.GameOver)
+            //if (tower.GameState != GameState.InProgress)
             //    return;
+            if (tower.GameState == GameState.GameOver)
+                return;
+
+            if (collided == null)
+                return;
 
             PlatformSlice slice = collided.GetComponent<PlatformSlice>();
             if (slice == null)
                 return;
 
-            Debug.Log($"{playerBall.colorId},{slice.colorId}");
-            bool hitResult = tower.HitCheck(playerBall.colorId, slice.colorId);
+            HitResult hitResult = tower.HitCheck(playerBall.colorId, slice.colorId);
 
             platformList.Remove(slice.ParentPlatform);
 
-            if (hitResult)
-            {
-                slice.ParentPlatform.Dissolve();
-                PushPlatform();
-                UpdateBallColor();
-            }
-            else
+            if(hitResult.playerDead)
             {
                 slice.ParentPlatform.Explode();
                 DestroyAllPlatforms();
+            }
+            else
+            {
+                if (hitResult.successfulHit)
+                    slice.ParentPlatform.Dissolve();
+                else
+                    slice.ParentPlatform.Explode();
+
+                PushPlatform();
+                UpdateBallColor();
             }
         }
 
