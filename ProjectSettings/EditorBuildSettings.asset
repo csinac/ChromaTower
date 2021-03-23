@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/ChromaTower.unity
+    guid: 5a5092c9e4a777147af37be1e8c4c4e0
   m_configObjects: {}

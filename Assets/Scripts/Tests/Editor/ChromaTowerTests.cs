@@ -8,15 +8,26 @@ namespace RectangleTrainer.ChromaTower.UnitTests {
         [Test]
         public void ChromaTower_NullScoreKeeper_ShouldThrowException()
         {
-            IPlayerState playerState = new PlayerState(new PlayerHPStaticRate());
-            Assert.Throws<System.Exception>(() => new ChromaTower(null, playerState));
+            PlayerState player = new PlayerState(new PlayerHPStaticRate());
+            Assert.Throws<System.Exception>(() => new ChromaTower(  null,
+                                                                    player,
+                                                                    new Difficulty(player)));
         }
 
         [Test]
         public void ChromaTower_NullPlayerState_ShouldThrowException()
         {
-            IScoreKeeper scoreKeeper = new PlayerPrefScoreKeeper();
-            Assert.Throws<System.Exception>(() => new ChromaTower(scoreKeeper, null));
+            Assert.Throws<System.Exception>(() => new ChromaTower(  new PlayerPrefScoreKeeper(),
+                                                                    null,
+                                                                    new Difficulty(new PlayerState(new PlayerHPStaticRate()))));
+        }
+
+        [Test]
+        public void ChromaTower_NullDifficulty_ShouldThrowException()
+        {
+            Assert.Throws<System.Exception>(() => new ChromaTower(  new PlayerPrefScoreKeeper(),
+                                                                    new PlayerState(new PlayerHPStaticRate()),
+                                                                    null));
         }
 
         [Test]
@@ -24,7 +35,9 @@ namespace RectangleTrainer.ChromaTower.UnitTests {
         {
             IScoreKeeper scoreKeeper = new PlayerPrefScoreKeeper();
             IPlayerState playerState = new PlayerState(new PlayerHPStaticRate());
-            ChromaTower tower = new ChromaTower(scoreKeeper, playerState);
+            IDifficulty difficulty = new Difficulty(playerState);
+
+            ChromaTower tower = new ChromaTower(scoreKeeper, playerState, difficulty);
 
             Assert.AreEqual(tower.GameState, GameState.Idle);
         }
@@ -34,7 +47,9 @@ namespace RectangleTrainer.ChromaTower.UnitTests {
         {
             IScoreKeeper scoreKeeper = new PlayerPrefScoreKeeper();
             IPlayerState playerState = new PlayerState(new PlayerHPStaticRate());
-            ChromaTower tower = new ChromaTower(scoreKeeper, playerState);
+            IDifficulty difficulty = new Difficulty(playerState);
+
+            ChromaTower tower = new ChromaTower(scoreKeeper, playerState, difficulty);
             int hpBefore = playerState.HP;
 
             tower.HitCheck(1, 2);
@@ -49,7 +64,9 @@ namespace RectangleTrainer.ChromaTower.UnitTests {
         {
             IScoreKeeper scoreKeeper = new PlayerPrefScoreKeeper();
             IPlayerState playerState = new PlayerState(new PlayerHPStaticRate());
-            ChromaTower tower = new ChromaTower(scoreKeeper, playerState);
+            IDifficulty difficulty = new Difficulty(playerState);
+
+            ChromaTower tower = new ChromaTower(scoreKeeper, playerState, difficulty);
 
             tower.HitCheck(1, 2); //take damage
             int hpBefore = playerState.HP;
@@ -65,8 +82,9 @@ namespace RectangleTrainer.ChromaTower.UnitTests {
         {
             IScoreKeeper scoreKeeper = new PlayerPrefScoreKeeper();
             IPlayerState playerState = new PlayerState(new PlayerHPStaticRate(100, 0.5f, 0.5f));
+            IDifficulty difficulty = new Difficulty(playerState);
 
-            ChromaTower tower = new ChromaTower(scoreKeeper, playerState);
+            ChromaTower tower = new ChromaTower(scoreKeeper, playerState, difficulty);
             tower.HitCheck(1, 2); //50% left
             tower.HitCheck(1, 2); //0% left
 

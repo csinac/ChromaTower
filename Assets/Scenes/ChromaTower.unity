@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 762896507}
   - component: {fileID: 762896506}
   - component: {fileID: 762896505}
+  - component: {fileID: 762896508}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -158,8 +159,8 @@ Camera:
   m_GameObject: {fileID: 762896504}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.9056604, g: 0.89107007, b: 0.8600925, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -206,6 +207,83 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &762896508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762896504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c9de49745a84724fbb0c1306916d909, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dampening: 0.95
+--- !u!1 &1058829454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1058829456}
+  - component: {fileID: 1058829455}
+  - component: {fileID: 1058829457}
+  m_Layer: 0
+  m_Name: ChromaTower
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1058829455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058829454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69d7a786c075ce448f969f2b4ca3317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformMaker: {fileID: 2068654082403386400, guid: 1efeca6d49af65646a6428ef1b331779,
+    type: 3}
+  colorServer: {fileID: 3812593937976323433, guid: 8b5a25799615c39488ecfebc666c4833,
+    type: 3}
+  playerStartPos: {x: 0, y: 3, z: -1}
+  firstDiskY: 0
+  diskSeparation: 2
+--- !u!4 &1058829456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058829454}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1058829457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058829454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f86b0683b2e07774080da13505e05239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dampening: 0.8
 --- !u!1 &1341910151
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,6 +313,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74ce1d9e1f4f879408500d02e7737e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerRenderer: {fileID: 1058829455}
+  playerBallPF: {fileID: 6327991069819862305, guid: 96be0042f9e0505469f0b424111911af,
+    type: 3}
+  ballTracker: {fileID: 762896508}
 --- !u!4 &1341910153
 Transform:
   m_ObjectHideFlags: 0

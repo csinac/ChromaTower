@@ -3,6 +3,7 @@
     public interface IPlayerState
     {
         int HP { get; }
+        float HPNormalized { get; }
         int Combo { get; }
         bool IsDead { get; }
 

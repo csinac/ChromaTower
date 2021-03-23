@@ -1,17 +1,46 @@
 using UnityEngine;
-using RectangleTrainer.ChromaTower.Engine;
 
-public class Bootstrapper : MonoBehaviour
+namespace RectangleTrainer.ChromaTower
 {
-    void Awake()
+    using Engine;
+    using View;
+
+    public class Bootstrapper : MonoBehaviour
     {
-        IPlayerHealth difficulty = new PlayerHPStaticRate(  maxHP: 100,
-                                                            damageRate: 0.34f,
-                                                            regenRate: 0.1f);
+        [SerializeField] ChromaTowerRenderer towerRenderer;
+        [SerializeField] PlayerBall playerBallPF;
+        [SerializeField] BallTracker ballTracker;
 
-        IPlayerState playerState = new PlayerState(difficulty);
-        IScoreKeeper scoreKeeper = new PlayerPrefScoreKeeper();
+        void Awake()
+        {
+            if(towerRenderer == null)
+            {
+                throw new System.Exception("Tower Renderer cannot be null. Assign a game object with ChromaTowerVisual behaviour");
+            }
 
-        ChromaTower tower = new ChromaTower(scoreKeeper, playerState);
+            if (ballTracker == null)
+            {
+                throw new System.Exception("Ball Tracker cannot be null. Attach ball tracker behaviour to the main camera and assign it to this field");
+            }
+
+            if(playerBallPF == null)
+            {
+                throw new System.Exception("Player Ball prefab cannot be null. Create a prefab with Player Ball behaviour and assign to this field.");
+            }
+
+            IPlayerHealth playerHealth = new PlayerHPStaticRate(maxHP: 100,
+                                                                damageRate: 0.34f,
+                                                                regenRate: 0.1f);
+
+            IPlayerState playerState = new PlayerState(playerHealth);
+            IScoreKeeper scoreKeeper = new PlayerPrefScoreKeeper();
+            IDifficulty difficulty = new Difficulty(playerState);
+
+            ChromaTower tower = new ChromaTower(scoreKeeper, playerState, difficulty);
+
+            towerRenderer.SetTower(tower);
+            towerRenderer.SetBall(playerBallPF);
+            ballTracker.SetPlayerTransform(towerRenderer.playerBall.transform);
+        }
     }
 }

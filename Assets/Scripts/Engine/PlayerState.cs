@@ -4,6 +4,7 @@
     {
         IPlayerHealth health;
         public int HP { get; private set; }
+        public float HPNormalized { get => 1f * HP / health.MaxHP; }
         public int Combo { get; private set; }
         public bool IsDead { get => HP == 0; }
 

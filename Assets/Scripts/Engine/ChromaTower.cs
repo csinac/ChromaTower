@@ -5,40 +5,44 @@ namespace RectangleTrainer.ChromaTower.Engine
     public class ChromaTower
     {
         public GameState GameState { get; private set; }
-        private IScoreKeeper scoreKeeper;
-        private IPlayerState playerState;
+        public IScoreKeeper scoreKeeper { get; private set; }
+        public IPlayerState playerState { get; private set; }
+        public IDifficulty difficulty { get; private set; }
 
         public event Action OnGameOver;
         public event Action OnPause;
         public event Action OnNewGame;
 
-        public ChromaTower(IScoreKeeper scoreKeeper, IPlayerState playerState)
+        public ChromaTower(IScoreKeeper scoreKeeper, IPlayerState playerState, IDifficulty difficulty)
         {
             GameState = GameState.Idle;
 
-            if(scoreKeeper == null || playerState == null)
+            if(scoreKeeper == null || playerState == null || difficulty == null)
             {
-                throw new Exception("Score Keeper and Player State cannot be null.");
+                throw new Exception("Score Keeper, Player State or the Difficulty cannot be null.");
             }
 
             this.scoreKeeper = scoreKeeper;
             this.playerState = playerState;
+            this.difficulty = difficulty;
         }
 
         public void NewGame()
         {
             playerState.Reset();
             scoreKeeper.ResetScore();
+            GameState = GameState.InProgress;
 
             OnNewGame?.Invoke();
         }
 
-        public void HitCheck(int ballColorId, int sliceColorId)
+        public bool HitCheck(int ballColorId, int targetColorId)
         {
-            if(ballColorId == sliceColorId)
+            if(ballColorId == targetColorId)
             {
                 playerState.Regen();
                 scoreKeeper.IncrementCurrentScore(playerState.Combo);
+                return true;
             }
             else
             {
@@ -48,6 +52,7 @@ namespace RectangleTrainer.ChromaTower.Engine
                     GameState = GameState.GameOver;
                     OnGameOver?.Invoke();
                 }
+                return false;
             }
         }
     }
