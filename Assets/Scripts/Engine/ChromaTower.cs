@@ -12,6 +12,7 @@ namespace RectangleTrainer.ChromaTower.Engine
         public event Action OnGameOver;
         public event Action OnPause;
         public event Action OnNewGame;
+        public event Action OnDamage;
 
         public ChromaTower(IScoreKeeper scoreKeeper, IPlayerState playerState, IDifficulty difficulty)
         {
@@ -47,6 +48,8 @@ namespace RectangleTrainer.ChromaTower.Engine
             else
             {
                 playerState.TakeDamage();
+                OnDamage?.Invoke();
+
                 if(playerState.IsDead)
                 {
                     GameState = GameState.GameOver;

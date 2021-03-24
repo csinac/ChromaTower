@@ -36,12 +36,7 @@ namespace RectangleTrainer.ChromaTower.View
         {
             FakeRotation();
             lastCollided = collision.gameObject;
-        }
-
-        private void FixedUpdate()
-        {
-            if(rb.velocity.y > fixedBounceVelocity)
-                rb.velocity = new Vector3(0, fixedBounceVelocity, 0);
+            rb.velocity = new Vector3(0, fixedBounceVelocity, 0);
         }
 
         private void LateUpdate()

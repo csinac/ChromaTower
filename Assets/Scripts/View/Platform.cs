@@ -18,14 +18,14 @@ namespace RectangleTrainer.ChromaTower.View
             return slices[picked].colorId;
         }
 
-        public void Dissolve()
+        public void Dissolve(bool panic = false)
         {
-            Destroy(gameObject);
-            //TODO: Animate
-        }
+            foreach(PlatformSlice slice in slices)
+            {
+                slice.transform.SetParent(null);
+                slice.Dissolve(panic);
+            }
 
-        public void Explode()
-        {
             Destroy(gameObject);
         }
     }

@@ -95,7 +95,7 @@ namespace RectangleTrainer.ChromaTower.View
 
             if(hitResult.playerDead)
             {
-                slice.ParentPlatform.Explode();
+                slice.ParentPlatform.Dissolve(panic: true);
                 DestroyAllPlatforms();
             }
             else
@@ -103,7 +103,7 @@ namespace RectangleTrainer.ChromaTower.View
                 if (hitResult.successfulHit)
                     slice.ParentPlatform.Dissolve();
                 else
-                    slice.ParentPlatform.Explode();
+                    slice.ParentPlatform.Dissolve(panic: true);
 
                 PushPlatform();
                 UpdateBallColor();

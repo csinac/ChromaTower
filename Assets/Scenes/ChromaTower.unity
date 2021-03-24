@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 762896507}
   - component: {fileID: 762896506}
   - component: {fileID: 762896505}
-  - component: {fileID: 762896508}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -200,26 +199,61 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762896504}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
+  m_Father: {fileID: 858703017}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &858703016
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 858703017}
+  - component: {fileID: 858703018}
+  m_Layer: 0
+  m_Name: CameraContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &858703017
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858703016}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 762896507}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &762896508
+--- !u!114 &858703018
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 762896504}
+  m_GameObject: {fileID: 858703016}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c9de49745a84724fbb0c1306916d909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dampening: 0.95
+  shakeDiminish: 0.9
+  shakeIncrement: 0.25
+  childTransform: {fileID: 762896507}
 --- !u!1 &1058829454
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +350,7 @@ MonoBehaviour:
   towerRenderer: {fileID: 1058829455}
   playerBallPF: {fileID: 6327991069819862305, guid: 96be0042f9e0505469f0b424111911af,
     type: 3}
-  ballTracker: {fileID: 762896508}
+  ballTracker: {fileID: 858703018}
 --- !u!4 &1341910153
 Transform:
   m_ObjectHideFlags: 0
