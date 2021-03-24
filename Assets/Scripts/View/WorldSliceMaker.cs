@@ -9,7 +9,7 @@ namespace RectangleTrainer.WheelOfPseudoFortune.Renderer
 {
     public static class WorldSliceMaker
     {
-        public static Mesh Generate(float arc, float radius = 1, float thickness = 0.1f, int arcResolution = 8)
+        public static Mesh Generate(float separation, float arc, float radius = 1, float thickness = 0.1f, int arcResolution = 8)
         {
             arc = Mathf.PI * arc / 180;
             Mesh mesh = new Mesh();
@@ -23,12 +23,12 @@ namespace RectangleTrainer.WheelOfPseudoFortune.Renderer
             vertices[0] =
             vertices[faceOffset * 2] =
             vertices[faceOffset * 4] =
-            vertices[faceOffset * 4 + 1] = new Vector3(0, 0, thickness);
+            vertices[faceOffset * 4 + 1] = new Vector3(separation, 0, thickness);
 
             vertices[faceOffset] =
             vertices[faceOffset * 3] =
             vertices[faceOffset * 4 + 2] =
-            vertices[faceOffset * 4 + 3] = new Vector3(0, 0, -thickness);
+            vertices[faceOffset * 4 + 3] = new Vector3(separation, 0, -thickness);
 
             float arcStep = arc / (arcResolution - 1);
 
@@ -39,7 +39,7 @@ namespace RectangleTrainer.WheelOfPseudoFortune.Renderer
                 sliceAngle += startAngle;
                 sliceAngle -= arc / 2f;
 
-                float x = Mathf.Cos(sliceAngle + arcStep * i) * radius;
+                float x = Mathf.Cos(sliceAngle + arcStep * i) * radius + separation;
                 float y = Mathf.Sin(sliceAngle + arcStep * i) * radius;
 
 
@@ -108,9 +108,9 @@ namespace RectangleTrainer.WheelOfPseudoFortune.Renderer
             return mesh;
         }
 
-        public static GameObject GenerateGameObject(float arc, Material mat, float radius = 1, float thickness = 0.1f, int arcResolution = 8)
+        public static GameObject GenerateGameObject(float separation, float arc, Material mat, float radius = 1, float thickness = 0.1f, int arcResolution = 8)
         {
-            return CreateGameObject(Generate(arc, radius, thickness, arcResolution), mat);
+            return CreateGameObject(Generate(separation, arc, radius, thickness, arcResolution), mat);
         }
 
         private static GameObject CreateGameObject(Mesh mesh, Material mat)

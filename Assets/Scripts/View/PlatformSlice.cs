@@ -12,6 +12,10 @@ namespace RectangleTrainer.ChromaTower.View
         public float panicEscapeSpeed { private get; set; }
         public float panicSpinSpeed { private get; set; }
 
+        private bool dissolving = false;
+        public float maxZ { private get; set; }
+        private float animTimeOffest = 0;
+
         public Platform ParentPlatform
         {
             get
@@ -23,8 +27,14 @@ namespace RectangleTrainer.ChromaTower.View
             }
         }
 
+        private void Start()
+        {
+            animTimeOffest = Random.Range(0f, 2 * Mathf.PI);
+        }
+
         public void Dissolve(bool panic)
         {
+            dissolving = true;
             MeshCollider collider = GetComponent<MeshCollider>();
             if (collider)
                 Destroy(collider);
@@ -60,6 +70,20 @@ namespace RectangleTrainer.ChromaTower.View
             }
 
             Destroy(gameObject);
+        }
+
+        private void Update()
+        {
+            AnimateThickness();
+        }
+
+        private void AnimateThickness()
+        {
+            if (dissolving)
+                return;
+
+            float thickness = 1 + Mathf.Cos(Time.time + animTimeOffest) * maxZ;
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, thickness);
         }
     }
 }

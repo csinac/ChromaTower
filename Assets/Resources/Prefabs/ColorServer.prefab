@@ -43,6 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf5769d21ab3d1499e268662a3d49ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brightness: 1
-  saturation: 0.5
-  minHueDifference: 0.15
+  brightness: 0.95
+  saturation: 0.6

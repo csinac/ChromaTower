@@ -5,5 +5,6 @@
         int MaxSlots { get; }
         int NextSlot();
         void UpdateSingleColorStatus(int platformCount);
+        bool NearDeath { get; }
     }
 }

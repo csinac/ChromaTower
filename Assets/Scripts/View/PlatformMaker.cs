@@ -5,11 +5,16 @@ namespace RectangleTrainer.ChromaTower.View
 {
     public class PlatformMaker: MonoBehaviour
     {
+        [Header("Slice Build Parameters")]
         [SerializeField] Material sliceMaterial;
+        [SerializeField] float sliceSeparation = 0.1f;
+        [Header("Slice Animation Parameters")]
+        [SerializeField] float sliceThicknessAnimationLimit = 0.2f;
         [SerializeField] float sliceDissolveTime = 0.5f;
         [SerializeField] Vector2 sliceDissolveTimeRange = new Vector2(0f, 0.25f);
         [SerializeField] AnimationCurve sliceDissolvePattern = AnimationCurve.EaseInOut(0, 1, 1, 0);
         [Space]
+        [Header("Slice Panic Parameters")]
         [SerializeField] float slicePanicEscapeSpeed = 0.1f;
         [SerializeField] float slicePanicSpinSpeed = 10;
 
@@ -49,7 +54,7 @@ namespace RectangleTrainer.ChromaTower.View
 
         private GameObject MakeSlice(Material mat, Transform parent, float yRot)
         {
-            GameObject slice = WorldSliceMaker.GenerateGameObject(arc, mat, radius: 2);
+            GameObject slice = WorldSliceMaker.GenerateGameObject(sliceSeparation, arc, mat, radius: 2);
             slice.name = "Disk Slice";
             slice.transform.SetParent(parent);
             slice.transform.localEulerAngles = new Vector3(90, yRot, 0);
@@ -61,6 +66,7 @@ namespace RectangleTrainer.ChromaTower.View
         {
             PlatformSlice pSlice = slice.AddComponent<PlatformSlice>();
             pSlice.colorId = colorId;
+            pSlice.maxZ = sliceThicknessAnimationLimit;
             pSlice.dissolveTime = sliceDissolveTime;
             pSlice.dissolveTimeRange = sliceDissolveTimeRange;
             pSlice.dissolvePattern = sliceDissolvePattern;

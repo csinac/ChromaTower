@@ -146,10 +146,6 @@ namespace RectangleTrainer.ChromaTower.View
             ready = false;
         }
 
-        void Update()
-        {
-        }
-
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;

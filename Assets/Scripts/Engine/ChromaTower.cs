@@ -12,6 +12,7 @@ namespace RectangleTrainer.ChromaTower.Engine
         public event Action OnGameOver;
         public event Action OnNewGame;
         public event Action OnDamage;
+        public event Action OnSuccessfulHit;
         public event Action OnHit;
 
         public ChromaTower(IScoreKeeper scoreKeeper, IPlayerState playerState, IDifficulty difficulty)
@@ -46,6 +47,7 @@ namespace RectangleTrainer.ChromaTower.Engine
                 playerState.Regen();
                 scoreKeeper.IncrementCurrentScore(playerState.Combo);
                 hitResult = new HitResult { successfulHit = true, playerDead = false };
+                OnSuccessfulHit?.Invoke();
             }
             else
             {

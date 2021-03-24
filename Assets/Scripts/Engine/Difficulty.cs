@@ -30,9 +30,14 @@
             forceSingleColor = platformCount < introPlatforms;
         }
 
+        public bool NearDeath
+        {
+            get => player.HPNormalized < almostDeadLimit;
+        }
+
         public int NextSlot()
         {
-            if(player.HPNormalized < almostDeadLimit || forceSingleColor)
+            if(NearDeath || forceSingleColor)
                 return lastSlot;
 
             lastSlot = UnityEngine.Random.Range(0, MaxSlots);

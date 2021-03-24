@@ -4,7 +4,6 @@ namespace RectangleTrainer.ChromaTower.View
 {
     public class BallTracker : MonoBehaviour
     {
-        [SerializeField, Range(0f, 1f), Tooltip("Zero = instant")] float dampening = 0.8f;
         [SerializeField, Range(0f, 1f), Tooltip("Zero = instant")] float shakeDiminish = 0.8f;
         [SerializeField] float shakeIncrement = 0.2f;
         [SerializeField] Transform childTransform;
@@ -13,7 +12,6 @@ namespace RectangleTrainer.ChromaTower.View
         private Transform ballTransform;
         private float yMin;
         private float delta;
-        private float targetPos;
 
         private float shake = 0;
         private bool firstRestart = true;
@@ -32,9 +30,8 @@ namespace RectangleTrainer.ChromaTower.View
 
         private void Initialize ()
         {
-            targetPos = transform.localPosition.y;
             yMin = ballTransform.localPosition.y;
-            delta = yMin - targetPos;
+            delta = yMin - transform.localPosition.y;
             childInitialPosition = new Vector3(childTransform.localPosition.x, childTransform.localPosition.y, childTransform.localPosition.z);
         }
 
@@ -46,8 +43,8 @@ namespace RectangleTrainer.ChromaTower.View
                 return;
             }
 
+            SetPos(yMin);
             yMin = ballTransform.localPosition.y;
-            targetPos = yMin;
         }
 
         private void LateUpdate()
@@ -61,11 +58,10 @@ namespace RectangleTrainer.ChromaTower.View
             if (!ballTransform)
                 return;
 
-            if (ballTransform.localPosition.y < yMin)
-                yMin = ballTransform.localPosition.y;
+            float ballPos = ballTransform.localPosition.y - delta;
+            float targetY = Mathf.Min(ballPos, transform.localPosition.y);
 
-            targetPos = targetPos * dampening + (yMin - delta) * (1 - dampening);
-            transform.localPosition = new Vector3(transform.localPosition.x, targetPos, transform.localPosition.z);
+            SetPos(targetY);
         }
 
         public void AddShake()
@@ -79,6 +75,11 @@ namespace RectangleTrainer.ChromaTower.View
                                                         childInitialPosition.y + Random.Range(-shake, shake),
                                                         childInitialPosition.z + Random.Range(-shake, shake));
             shake *= shakeDiminish;
+        }
+
+        private void SetPos(float y)
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, y, transform.localPosition.z);
         }
     }
 }

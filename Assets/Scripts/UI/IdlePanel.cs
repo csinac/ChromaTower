@@ -34,6 +34,7 @@ namespace RectangleTrainer.ChromaTower.UI
             };
             this.tower.OnGameOver += () => 
             {
+                UpdateHighscore();
                 newGameButton.SwitchToReplayLabel();
                 Fade(PanelVisibility.Visible);
             };

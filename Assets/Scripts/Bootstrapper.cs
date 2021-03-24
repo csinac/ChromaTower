@@ -11,16 +11,20 @@ namespace RectangleTrainer.ChromaTower
         [Header("UI")]
         [SerializeField] IdlePanel idlePanel;
         [SerializeField] InGamePanel inGamePanel;
+        [SerializeField] BackgroundRenderer backgroundRenderer;
+        [SerializeField] VignetteRenderer vignetteRenderer;
         [Space]
         [Header("Gameplay Objects")]
         [SerializeField] ChromaTowerRenderer towerRenderer;
         [SerializeField] PlayerBall playerBallPF;
         [SerializeField] BallTracker ballTracker;
+        [SerializeField] AudioManager audioManager;
         [Space]
         [Header("Health Options")]
         [SerializeField] int playerMaxHP = 100;
         [SerializeField, Range(0, 1)] float damageRate = 0.32f;
         [SerializeField, Range(0, 1)] float regenRate = 0.03f;
+        [SerializeField, Range(0, 1)] float nearDeathRatio = 0.15f;
         [Space]
         [Header("Difficulty Options")]
         [SerializeField] int colorCount = 7;
@@ -45,6 +49,7 @@ namespace RectangleTrainer.ChromaTower
             }
 
             PrepareEngine();
+            PrepareRenderers();
             PrepareUI();
 
             towerRenderer.StartGame();
@@ -58,14 +63,23 @@ namespace RectangleTrainer.ChromaTower
 
             playerState = new PlayerState(playerHealth);
             scoreKeeper = new PlayerPrefScoreKeeper();
-            difficulty = new Difficulty(playerState, maxSlots: colorCount, introPlatforms: introPlatformCount);
+            difficulty = new Difficulty(playerState: playerState,
+                                        maxSlots: colorCount,
+                                        introPlatforms: introPlatformCount,
+                                        almostDeadLimit: nearDeathRatio);
 
             tower = new ChromaTower(scoreKeeper, playerState, difficulty);
+        }
 
+        private void PrepareRenderers()
+        {
             towerRenderer.SetTower(tower);
             towerRenderer.SetBall(playerBallPF);
             ballTracker.Initialize(towerRenderer.playerBall.transform);
             ballTracker.SubscribeToEngineEvents(tower);
+            backgroundRenderer.Initialize(towerRenderer);
+            vignetteRenderer.Initialize(towerRenderer);
+            audioManager.Initialize(tower);
         }
 
         private void PrepareUI()
@@ -83,6 +97,15 @@ namespace RectangleTrainer.ChromaTower
 
             if (inGamePanel == null)
                 throw new System.Exception("In Game Panel cannot be null. Assign a game object with the Idle panel behaviour");
+
+            if (backgroundRenderer == null)
+                throw new System.Exception("Background Renderer cannot be null. Assign a UI panel in a world space canvas with the Background Renderer behaviour");
+
+            if (vignetteRenderer == null)
+                throw new System.Exception("Vignette Renderer cannot be null. Assign a UI panel in a world space canvas with the Vignette Renderer behaviour");
+
+            if(audioManager == null)
+                throw new System.Exception("Audio Manager cannot be null. Assign a game object with Audio Manager behaviour");
 
             if (towerRenderer == null)
                 throw new System.Exception("Tower Renderer cannot be null. Assign a game object with ChromaTowerVisual behaviour");
