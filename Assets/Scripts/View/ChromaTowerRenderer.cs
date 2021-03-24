@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,16 +10,20 @@ namespace RectangleTrainer.ChromaTower.View
     [RequireComponent(typeof(DragRotator))]
     public class ChromaTowerRenderer : MonoBehaviour
     {
-        private ChromaTower tower;
+        public ChromaTower tower { get; private set; }
 
         [SerializeField] PlatformMaker platformMaker;
         [SerializeField] AColorServer colorServer;
         [Space]
         [SerializeField] Vector3 playerStartPos = new Vector3(0, 1, -1);
-        [SerializeField] float firstDiskY = 0;
+        [SerializeField] float diskYStart = 0;
         [SerializeField] float diskSeparation = 2;
 
+        public Action<Color> OnBallColorUpdate;
+
+        private float diskY;
         public PlayerBall playerBall { get; private set; }
+        public bool ready { get; private set; }
         private DragRotator rotator;
         private List<Platform> platformList;
 
@@ -27,8 +31,16 @@ namespace RectangleTrainer.ChromaTower.View
         {
             NullChecks();
             Initialize();
+        }
+
+        public void StartGame()
+        {
+            if (ready)
+                return;
+
             BuildPlatforms();
             UpdateBallColor();
+            playerBall.ResetBall();
         }
 
         private void NullChecks()
@@ -47,39 +59,41 @@ namespace RectangleTrainer.ChromaTower.View
 
         public void SetBall(PlayerBall playerBallPF)
         {
-            playerBall = Instantiate(playerBallPF, playerStartPos, new Quaternion());
+            playerBall = Instantiate(playerBallPF);
             playerBall.AttachTower(this);
+            playerBall.Initialize(playerStartPos);
         }
 
         private void BuildPlatforms()
         {
+            diskY = diskYStart;
             for (int i = 0; i < 5; i++)
             {
-                PushPlatform();
                 tower.difficulty.UpdateSingleColorStatus(i);
+                PushPlatform();
             }
+
+            ready = true;
         }
 
         private void PushPlatform()
         {
             GameObject platform = platformMaker.GeneratePlatform(tower.difficulty, colorServer);
             platform.transform.SetParent(transform);
-            platform.transform.localPosition = new Vector3(0, firstDiskY, 0);
-            firstDiskY -= diskSeparation;
+            platform.transform.localPosition = new Vector3(0, diskY, 0);
+            diskY -= diskSeparation;
             platformList.Add(platform.GetComponent<Platform>());
         }
 
         public void SetTower(ChromaTower tower)
         {
             this.tower = tower;
+            this.tower.OnNewGame += StartGame;
         }
 
         public void OnPlayerCollision(GameObject collided)
         {
-            //TODO: Post UI
-            //if (tower.GameState != GameState.InProgress)
-            //    return;
-            if (tower.GameState == GameState.GameOver)
+            if (tower.GameState != GameState.InProgress)
                 return;
 
             if (collided == null)
@@ -117,14 +131,19 @@ namespace RectangleTrainer.ChromaTower.View
 
             int pickedColor = platformList[0].PickRandomTarget();
             playerBall.UpdateColor(colorServer.GetColor(pickedColor, tower.difficulty.MaxSlots), pickedColor);
+
+            OnBallColorUpdate?.Invoke(colorServer.LastColor());
         }
 
         private void DestroyAllPlatforms()
         {
-           foreach(Platform platform in platformList)
+            foreach(Platform platform in platformList)
             {
                 platform.Dissolve();
             }
+
+            platformList.Clear();
+            ready = false;
         }
 
         void Update()
@@ -138,7 +157,7 @@ namespace RectangleTrainer.ChromaTower.View
 
             for(int i = 0; i < 3; i++)
             {
-                Gizmos.DrawWireCube(new Vector3(0, firstDiskY - diskSeparation * i, 0), new Vector3(4, 0.1f, 4));
+                Gizmos.DrawWireCube(new Vector3(0, diskY - diskSeparation * i, 0), new Vector3(4, 0.1f, 4));
             }
         }
     }

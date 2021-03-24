@@ -23,7 +23,7 @@ namespace RectangleTrainer.ChromaTower.View
 
             arc = 360f / diff.MaxSlots;
 
-            float lastYRot = 0;
+            float lastYRot = Random.Range(0f, 360f);
             for (int i = 0; i < diff.MaxSlots; i++)
             {
                 int colorId = diff.NextSlot();

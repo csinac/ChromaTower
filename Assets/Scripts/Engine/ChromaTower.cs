@@ -10,9 +10,9 @@ namespace RectangleTrainer.ChromaTower.Engine
         public IDifficulty difficulty { get; private set; }
 
         public event Action OnGameOver;
-        public event Action OnPause;
         public event Action OnNewGame;
         public event Action OnDamage;
+        public event Action OnHit;
 
         public ChromaTower(IScoreKeeper scoreKeeper, IPlayerState playerState, IDifficulty difficulty)
         {
@@ -39,11 +39,13 @@ namespace RectangleTrainer.ChromaTower.Engine
 
         public HitResult HitCheck(int ballColorId, int targetColorId)
         {
+            HitResult hitResult;
+
             if(ballColorId == targetColorId)
             {
                 playerState.Regen();
                 scoreKeeper.IncrementCurrentScore(playerState.Combo);
-                return new HitResult { successfulHit = true, playerDead = false };
+                hitResult = new HitResult { successfulHit = true, playerDead = false };
             }
             else
             {
@@ -55,11 +57,16 @@ namespace RectangleTrainer.ChromaTower.Engine
                     GameState = GameState.GameOver;
                     OnGameOver?.Invoke();
 
-                    return new HitResult { successfulHit = false, playerDead = true };
+                    hitResult = new HitResult { successfulHit = false, playerDead = true };
                 }
-
-                return new HitResult { successfulHit = false, playerDead = false };
+                else
+                {
+                    hitResult = new HitResult { successfulHit = false, playerDead = false };
+                }
             }
+
+            OnHit?.Invoke();
+            return hitResult;
         }
     }
 }

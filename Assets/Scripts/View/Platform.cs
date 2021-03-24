@@ -22,8 +22,11 @@ namespace RectangleTrainer.ChromaTower.View
         {
             foreach(PlatformSlice slice in slices)
             {
-                slice.transform.SetParent(null);
-                slice.Dissolve(panic);
+                if(slice)
+                {
+                    slice.transform.SetParent(null);
+                    slice.Dissolve(panic);
+                }
             }
 
             Destroy(gameObject);

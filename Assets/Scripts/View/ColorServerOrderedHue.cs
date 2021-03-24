@@ -6,18 +6,18 @@ namespace RectangleTrainer.ChromaTower.View
     {
         [SerializeField] private float brightness;
         [SerializeField] private float saturation;
-        [SerializeField] private float minHueDifference;
 
-        public ColorServerOrderedHue(float saturation, float brightness, float minHueDifference)
-        {
-            this.saturation = saturation;
-            this.brightness = brightness;
-            this.minHueDifference = minHueDifference;
-        }
+        private Color lastColor;
 
         override public Color GetColor(int index, int range)
         {
-            return Color.HSVToRGB(1f * index / range, saturation, brightness);
+            lastColor = Color.HSVToRGB(1f * index / range, saturation, brightness);
+            return lastColor;
+        }
+
+        public override Color LastColor()
+        {
+            return lastColor;
         }
 
         override public Color MakeColor()

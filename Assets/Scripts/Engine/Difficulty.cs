@@ -27,7 +27,7 @@
 
         public void UpdateSingleColorStatus(int platformCount)
         {
-            forceSingleColor = platformCount < introPlatforms - 1;
+            forceSingleColor = platformCount < introPlatforms;
         }
 
         public int NextSlot()

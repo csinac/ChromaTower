@@ -9,16 +9,28 @@ namespace RectangleTrainer.ChromaTower.View
     {
         [SerializeField] Renderer meshRenderer;
         [SerializeField] float fixedBounceVelocity = 5;
-        Rigidbody rb;
-        ChromaTowerRenderer tower;
+        private Rigidbody rb;
+        private ChromaTowerRenderer tower;
         public int colorId { get; private set; }
+        private Vector3 startPos;
+        private GameObject lastCollided = null;
 
-        GameObject lastCollided = null;
-
-        void Start()
+        void Awake()
         {
             rb = GetComponent<Rigidbody>();
             FakeRotation();
+        }
+
+        public void ResetBall()
+        {
+            transform.position = startPos;
+            rb.velocity = Vector3.zero;
+        }
+
+        public void Initialize(Vector3 startPos)
+        {
+            this.startPos = startPos;
+            transform.position = startPos;
         }
 
         public void AttachTower(ChromaTowerRenderer tower)

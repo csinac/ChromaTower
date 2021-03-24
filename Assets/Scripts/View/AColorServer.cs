@@ -6,5 +6,6 @@ namespace RectangleTrainer.ChromaTower.View
     {
         abstract public Color MakeColor();
         abstract public Color GetColor(int index, int range);
+        abstract public Color LastColor();
     }
 }
